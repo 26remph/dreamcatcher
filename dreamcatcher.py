@@ -14,11 +14,8 @@ from exceptions import SendMessageError
 
 load_dotenv()
 
-PRACTICUM_TOKEN = os.getenv('PRACTICUM_TOKEN')
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 GOOGLE_TOKEN = os.getenv('GOOGLE_TOKEN')
-TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
-HEADERS = {'Authorization': f'OAuth {PRACTICUM_TOKEN}'}
 
 logging.basicConfig(
     format='%(asctime)s | %(name)s | %(levelname)s | '
