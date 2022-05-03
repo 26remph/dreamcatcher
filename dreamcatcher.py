@@ -25,6 +25,7 @@ def send_message(bot, chat_id, message):
     try:
         bot.send_message(chat_id, message)
     except telegram.error.TelegramError as e:
+        logging.exception(f'Ошибка отправки сообщения: `{e}`')
         raise SendMessageError(e) from e
 
 
@@ -37,6 +38,7 @@ def send_photo(bot, chat_id, image, caption):
             caption=f'Текст сна: {caption}',
         )
     except telegram.error.TelegramError as e:
+        logging.exception(f'Ошибка отправки сообщения: `{e}`')
         raise SendMessageError(e) from e
 
 
@@ -64,18 +66,11 @@ def write_text(update: Update, context: CallbackContext):
     """Обработчик введенного вручную текста."""
     lighthouse = get_image(update.message.text)
     chat = update.effective_chat
-    msg = 'Спасибо, я получил описание твоего сна и подобрал маячок,' \
-          'он поможет тебе восстановить сновидение!\n'
-    try:
-        send_message(context.bot, chat.id, msg)
-    except SendMessageError:
-        logging.error(f'Ошибка отправки сообщения боту: `{msg}`')
 
-    msg = update.message.text
-    try:
-        send_photo(context.bot, chat.id, lighthouse, caption=msg)
-    except SendMessageError:
-        logging.error(f'Ошибка отправки сообщения боту: `{msg}`')
+    msg = 'Сновидение поймано...'
+    send_message(context.bot, chat.id, msg)
+
+    send_photo(context.bot, chat.id, lighthouse, caption=update.message.text)
 
 
 def say_voice(update: Update, context: CallbackContext):
@@ -112,11 +107,11 @@ def say_voice(update: Update, context: CallbackContext):
             "Could not request results from Google Speech Recognition "
             "service; {0}".format(e))
 
+    msg = 'Сновидение поймано...'
+    send_message(context.bot, chat.id, msg)
+
     lighthouse = get_image(text_dream)
-    try:
-        send_photo(context.bot, chat.id, lighthouse, caption=text_dream)
-    except SendMessageError:
-        logging.error(f'Ошибка отправки сообщения боту: `{text_dream}`')
+    send_photo(context.bot, chat.id, lighthouse, caption=text_dream)
 
 
 def main():  # noqa: C901
