@@ -1,4 +1,9 @@
 """Settings environment module."""
+import os
 
-RETRY_TIME = 600
-ENDPOINT = 'https://practicum.yandex.ru/api/user_api/homework_statuses/'
+from dotenv import load_dotenv
+
+load_dotenv()
+
+TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
+GOOGLE_TOKEN = os.getenv('GOOGLE_TOKEN')

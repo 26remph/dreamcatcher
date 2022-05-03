@@ -1,21 +1,17 @@
 """Телеграмм бот. Ловец сновидений. Минимальная рабочая версия."""
 import logging
 import os
+from pprint import pprint
 
 import speech_recognition as sr
 import telegram
-from dotenv import load_dotenv
 from pydub import AudioSegment
 from serpapi import GoogleSearch
 from telegram import Update
 from telegram.ext import CallbackContext, Filters, MessageHandler, Updater
 
 from exceptions import SendMessageError
-
-load_dotenv()
-
-TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
-GOOGLE_TOKEN = os.getenv('GOOGLE_TOKEN')
+from settings import GOOGLE_TOKEN, TELEGRAM_TOKEN
 
 logging.basicConfig(
     format='%(asctime)s | %(name)s | %(levelname)s | '
@@ -49,19 +45,23 @@ def get_image(query):
     search = GoogleSearch(
         {
             "q": query,
-            "location": "Austin,Texas",
+            "localization": "google_domain",
+            "tbm": "isch",
             "ijn": "0",
-            "device": "desktop",
+            "device": "mobile",
             "api_key": GOOGLE_TOKEN
         }
     )
     result = search.get_dict()
-    lighthouse_photo = result.get('inline_images')[0].get('thumbnail')
+    pprint(result)
+
+    lighthouse_photo = result.get('images_results')[0].get('original')
+
     return lighthouse_photo
 
 
 def write_text(update: Update, context: CallbackContext):
-    """Обработчик введенного в ручную текста."""
+    """Обработчик введенного вручную текста."""
     lighthouse = get_image(update.message.text)
     chat = update.effective_chat
     msg = 'Спасибо, я получил описание твоего сна и подобрал маячок,' \
@@ -80,15 +80,17 @@ def write_text(update: Update, context: CallbackContext):
 
 def say_voice(update: Update, context: CallbackContext):
     """
-    Обработчик голосового ввода, преобразует его текст.
-    Ищет маячок сновидения и прикрепляет его к нему. Использует
-    `google serpapi` для поиска, и сврис google для перевода голоса.
+    Обработчик голосового ввода.
+
+    Преобразует его текст. Ищет маячок сновидения и прикрепляет его к нему.
+    Использует:
+        -`google serpapi` для поиска, и сврис google для перевода голоса.
     """
     chat = update.effective_chat
     file_id = update.message.voice.file_id
     audio_tg = context.bot.get_file(file_id=file_id)
-
     audio_tg.download('captured.ogg')
+
     ogg_version = AudioSegment.from_ogg('captured.ogg')
     # play(ogg_version)
     ogg_version.export('output.wav', format="wav")
