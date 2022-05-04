@@ -8,7 +8,8 @@ import telegram
 from pydub import AudioSegment
 from serpapi import GoogleSearch
 from telegram import Update
-from telegram.ext import CallbackContext, Filters, MessageHandler, Updater
+from telegram.ext import (CallbackContext, CommandHandler, Filters,
+                          MessageHandler, Updater)
 
 from exceptions import SendMessageError
 from settings import GOOGLE_TOKEN, TELEGRAM_TOKEN
@@ -114,9 +115,15 @@ def say_voice(update: Update, context: CallbackContext):
     send_photo(context.bot, chat.id, lighthouse, caption=text_dream)
 
 
+def wake_up(update: Update, context: CallbackContext):
+    """Обработчик кнопки '/start'."""
+    pass
+
+
 def main():  # noqa: C901
     """Основная логика работы бота."""
     updater = Updater(token=TELEGRAM_TOKEN)
+    updater.dispatcher.add_handler(CommandHandler('start', wake_up))
     updater.dispatcher.add_handler(MessageHandler(Filters.voice, say_voice))
     updater.dispatcher.add_handler(MessageHandler(Filters.text, write_text))
     updater.start_polling()
