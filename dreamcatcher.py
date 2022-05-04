@@ -36,7 +36,7 @@ def send_photo(bot, chat_id, image, caption):
         bot.send_photo(
             chat_id,
             image,
-            caption=f'Текст сна: {caption}',
+            caption=f'Сновидение поймано:\n {caption}',
         )
     except telegram.error.TelegramError as e:
         logging.exception(f'Ошибка отправки сообщения: `{e}`')
@@ -56,7 +56,6 @@ def get_image(query):
         }
     )
     result = search.get_dict()
-    pprint(result)
 
     lighthouse_photo = result.get('images_results')[0].get('original')
 
@@ -68,8 +67,8 @@ def write_text(update: Update, context: CallbackContext):
     lighthouse = get_image(update.message.text)
     chat = update.effective_chat
 
-    msg = 'Сновидение поймано...'
-    send_message(context.bot, chat.id, msg)
+    # msg = 'Сновидение поймано...'
+    # send_message(context.bot, chat.id, msg)
 
     send_photo(context.bot, chat.id, lighthouse, caption=update.message.text)
 
@@ -98,7 +97,7 @@ def say_voice(update: Update, context: CallbackContext):
     text_dream = ''
     try:
         text_dream = r.recognize_google(audio, language='ru-RU')
-        logging.info(f'Текст файла преобразован {text_dream}')
+        logging.info(f'Голос преобразован: `{text_dream}`')
     except sr.UnknownValueError:
         logging.error(
             "Google Speech Recognition could not understand audio"
@@ -108,8 +107,8 @@ def say_voice(update: Update, context: CallbackContext):
             "Could not request results from Google Speech Recognition "
             "service; {0}".format(e))
 
-    msg = 'Сновидение поймано...'
-    send_message(context.bot, chat.id, msg)
+    # msg = 'Сновидение поймано...'
+    # send_message(context.bot, chat.id, msg)
 
     lighthouse = get_image(text_dream)
     send_photo(context.bot, chat.id, lighthouse, caption=text_dream)
