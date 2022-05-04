@@ -80,7 +80,7 @@ def say_voice(update: Update, context: CallbackContext):
 
     Преобразует его текст. Ищет маячок сновидения и прикрепляет его к нему.
     Использует:
-        -`google serpapi` для поиска, и сврис google для перевода голоса.
+        -`google serpapi` для поиска, и сервис google для перевода голоса.
     """
     chat = update.effective_chat
     file_id = update.message.voice.file_id
@@ -117,7 +117,10 @@ def say_voice(update: Update, context: CallbackContext):
 
 def wake_up(update: Update, context: CallbackContext):
     """Обработчик кнопки '/start'."""
-    pass
+    chat = update.effective_chat
+    msg = ('Ловец снов активирован ...'
+           '\nв момент пробуждения, запиши голосовое. Опиши что видел.')
+    send_message(context.bot, chat.id, msg)
 
 
 def main():  # noqa: C901
