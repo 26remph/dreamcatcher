@@ -1,7 +1,6 @@
 """Телеграмм бот. Ловец сновидений. Минимальная рабочая версия."""
 import logging
 import os
-from pprint import pprint
 
 import speech_recognition as sr
 import telegram
@@ -66,10 +65,6 @@ def write_text(update: Update, context: CallbackContext):
     """Обработчик введенного вручную текста."""
     lighthouse = get_image(update.message.text)
     chat = update.effective_chat
-
-    # msg = 'Сновидение поймано...'
-    # send_message(context.bot, chat.id, msg)
-
     send_photo(context.bot, chat.id, lighthouse, caption=update.message.text)
 
 
@@ -87,7 +82,6 @@ def say_voice(update: Update, context: CallbackContext):
     audio_tg.download('captured.ogg')
 
     ogg_version = AudioSegment.from_ogg('captured.ogg')
-    # play(ogg_version)
     ogg_version.export('output.wav', format="wav")
 
     r = sr.Recognizer()
@@ -106,9 +100,6 @@ def say_voice(update: Update, context: CallbackContext):
         logging.error(
             "Could not request results from Google Speech Recognition "
             "service; {0}".format(e))
-
-    # msg = 'Сновидение поймано...'
-    # send_message(context.bot, chat.id, msg)
 
     lighthouse = get_image(text_dream)
     send_photo(context.bot, chat.id, lighthouse, caption=text_dream)
