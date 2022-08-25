@@ -1,7 +1,7 @@
 ![(c) image load from tg-journal.com](https://tg-journal.com/wp-content/uploads/2021/04/illjuziya.jpg)
-**DREAMCATCHER (Ловец сновидений)**
 
-## Бот ловец сновидений 
+## DREAMCATCHER (Бот ловец сновидений)
+
 Бот для записи сновидений в моменты пробуждения.
   
 ### О проекте
@@ -67,7 +67,7 @@
 ####Техническое исполнение
 
 Two handler function:
-def write_text(update: Update, context: CallbackContext):
-def say_voice(update: Update, context: CallbackContext):
 
+        def write_text(update: Update, context: CallbackContext):
+        def say_voice(update: Update, context: CallbackContext):
 ...
