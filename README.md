@@ -1,7 +1,6 @@
 ![(c) image load from tg-journal.com](https://tg-journal.com/wp-content/uploads/2021/04/illjuziya.jpg)
+**DREAMCATCHER (Ловец сновидений)**
 
-./my_dreamcatcher_bot
-DREAMCATCHER (Ловец сновидений)
 ## Бот ловец сновидений 
 Бот для записи сновидений в моменты пробуждения.
   
@@ -64,7 +63,7 @@ DREAMCATCHER (Ловец сновидений)
 - python-telegram bot
 - google serpapi
 - google speech kit
-- 
+
 ####Техническое исполнение
 
 Two handler function:
